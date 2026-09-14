@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
 import PageviewTracker from "@/components/analytics/PageviewTracker";
+import { ConsentTag } from "@/components/analytics/ConsentTag";
 import "./globals.css";
 
 const TRACKED_HOSTNAMES = ["riftvalleytraders.co", "www.riftvalleytraders.co"];
 
+// GA4 (cookieless until accepted) and the LeadLens visitor pixel (only after
+// accepting), behind one notice — see components/analytics/ConsentTag.tsx.
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-9GD6Z8HNR6";
+const LEADLENS_SITE_ID = process.env.NEXT_PUBLIC_LEADLENS_SITE_ID || "e215d503-ae91-407c-85dc-d5eac589dcf8";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://riftvalleytraders.co"),
+  verification: { google: "IJV1i67ECERi-dCVwaKH05_cyhg1vW1gr7FvXzT79lA" },
   title: "Rift Valley Traders | African Specialty & Commodity Trade",
   description:
     "Connecting global markets with Africa's finest commodities since 1987. Single-origin coffee, spices, and heritage goods for discerning buyers, plus bulk grain, sugar, and commodity trade at scale.",
@@ -47,6 +55,13 @@ export default function RootLayout({
       <body className="antialiased">
         {children}
         <PageviewTracker site="riftvalley" hostnames={TRACKED_HOSTNAMES} />
+        <ConsentTag
+          ga={GA_ID}
+          leadlensSiteId={LEADLENS_SITE_ID}
+          hostnames={[...TRACKED_HOSTNAMES, "riftvalleytraders.netlify.app"]}
+          storageKey="riftvalley.consent"
+          reopenEvent="riftvalley:consent-choices"
+        />
       </body>
     </html>
   );
