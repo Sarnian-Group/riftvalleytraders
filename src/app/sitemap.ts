@@ -1,5 +1,8 @@
 import type { MetadataRoute } from "next";
 
+// Static on purpose: served the same under `output: export` and on the Netlify runtime.
+export const dynamic = "force-static";
+
 const BASE = "https://riftvalleytraders.co";
 
 export default function sitemap(): MetadataRoute.Sitemap {
